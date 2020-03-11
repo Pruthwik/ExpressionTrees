@@ -74,10 +74,31 @@ class Divide(Expr):
         return eval(evalExpr)
 
 
+class integerDivide(Expr):
+    def __init__(self, left, right):
+        self.left = left
+        self.right = right
+
+    def __str__(self):
+        return '( ' + str(self.left) + ' // ' + str(self.right) + ' )'
+
+    def eval(self, env):
+        evalExpr = ''.join([ch if ch not in env else str(env[ch]) for ch in str(self)])
+        return eval(evalExpr)
+
+
 def main():
-    e1 = Times(Const(3), Var('x'))
-    e2 = Plus(e1, Var('y'))
-    print(e2.eval({'x': 2, 'y': 3}))
+    var1, var2, var3 = Var('x'), Var('y'), Var('z')
+    const1, const2 = Const(3), Const(4)
+    e1 = Plus(var1, var2)
+    e2 = Times(const1, e1)
+    e3 = Minus(var2, var3)
+    e4 = Times(const2, e3)
+    e5 = Divide(e2, e4)
+    e6 = integerDivide(e2, e4)
+    valuesForVars = {'x': 7, 'y': 5, 'z': 2}
+    print(e5.eval(valuesForVars))
+    print(e6.eval(valuesForVars))
 
 
 if __name__ == '__main__':
